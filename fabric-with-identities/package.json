@@ -8,7 +8,7 @@
     "start": "node dist/app.js",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "dev": "nodemon src/app.ts",
-    "clean" : "rm -r .certStore*"
+    "clean" : "rm -r .certStore* && docker rm -f vault"
   },
   "keywords": [],
   "author": "",

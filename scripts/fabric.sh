@@ -74,6 +74,9 @@ function network(){
 
 function networkClean(){
     infoln "Clean up fabric network"
+    export COMPOSE_PROJECT_NAME=net
+    export IMAGE_TAG=latest
+    export SYS_CHANNEL=system-channel
     cd $COMPONENT_FOLDER/fabric-samples
     cd test-network
     ./network.sh down
