@@ -36,6 +36,9 @@ function network(){
     cd test-network
     
     infoln "./network.sh up createChannel -ca -c mychannel -s couchdb"
+    export COMPOSE_PROJECT_NAME=net
+    export IMAGE_TAG=latest
+    export SYS_CHANNEL=system-channel
     ./network.sh up createChannel -ca -c mychannel -s couchdb
     if [ ! $? -eq 0 ];then
         fatalln "Failed to start fabric network"

@@ -1,10 +1,11 @@
 # Cactus Samples
 
-Not a officially cactus sample, demonstrating multiple samples which make use of cactus project.
+Not a officially HL cactus sample, demonstrating multiple samples which make use of HL cactus project.
 
 - [Cactus Samples](#cactus-samples)
   - [Getting Started](#getting-started)
     - [HL Fabric Network](#hl-fabric-network)
+  - [Samples](#samples)
 
 ## Getting Started
 
@@ -41,3 +42,7 @@ Fabric Network Network Details
   - URL : http://localhost:7984/_utils
   - username : `admin`
   - password : `adminpw`
+
+## Samples
+
+- [Fabric With Identities](fabric-with-identities/README.md)

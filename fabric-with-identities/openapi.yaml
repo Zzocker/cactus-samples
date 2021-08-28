@@ -1,0 +1,164 @@
+openapi: 3.0.0
+info: 
+  title : "Cactus Samples - Fabric With Identities"
+  description: |
+    Uses `@hyperledger/cactus-plugin-ledger-connector-fabric` provided by HL Cactus to 
+    demonstrate how one can interact with fabric using `private key` 
+    provided by other identity provider other then default ones by 
+    `fabric-node-sdk`. In this sample `private key` of client are stored on vault server.
+  version: '0.0.1'
+
+tags:
+  - name: HL Fabric
+
+servers:
+  - url: "http://localhost:9999/v1"
+
+security:
+  - basicAuth: []
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    IdentityType:
+      type: string
+      enum:
+        - VAULT
+        - DEFAULT
+
+  requestBodies:
+    EnrollmentRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - "secret"
+            properties:
+              secret:
+                type: string
+              
+                
+  parameters:
+    identityType:
+      name: signingType
+      in: query
+      description: type of identity to be used for signing fabric messages
+      required: true
+      schema:
+        $ref: "#/components/schemas/IdentityType"
+    username:
+      name: username
+      in: query
+      description: username of the caller
+      required: true
+      schema:
+        type: string
+    ccMethod:
+      name: ccMethod
+      in: query
+      description: method name of the chaincode
+      required: true
+      schema:
+        type: string
+    ccParams:
+      name: ccParams
+      in: query
+      description: chaincode parameters
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    enrollmentId:
+      name: enrollmentId
+      in: query
+      description: enrollmentId for enrolling and registering
+      required: true
+      schema:
+        type: string
+
+
+paths:
+  /ca/enroll:
+    post:
+      tags:
+        - HL Fabric
+      summary: enroll client with fabric-ca
+      parameters:
+        - $ref : "#/components/parameters/identityType"
+        - $ref : "#/components/parameters/username"
+      requestBody:
+        $ref: "#/components/requestBodies/EnrollmentRequest"
+      responses:
+        '201':
+          description: CLIENT ENROLLED
+  /ca/rotateKey:
+    post:
+      tags:
+        - HL Fabric
+      summary: rotate private key of the client
+      parameters:
+        - $ref : "#/components/parameters/identityType"
+        - $ref : "#/components/parameters/username"
+      requestBody:
+        $ref: "#/components/requestBodies/EnrollmentRequest"
+      responses:
+        '201':
+          description: KEY ROTATED
+  /ca/register:
+    post:
+      tags:
+        - HL Fabric
+      summary: register a new client using registrar's identity
+      parameters:
+        - $ref : "#/components/parameters/identityType"
+        - $ref : "#/components/parameters/username"
+        - $ref : "#/components/parameters/enrollmentId"
+      responses:
+        '201':
+          description: CLIENT REGISTERED
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enrollmentSecret:
+                    type: string
+  /fabric:
+    get:
+      tags:
+        - HL Fabric
+      summary: query basic asset transfer chaincode
+      parameters:
+        - $ref : "#/components/parameters/identityType"
+        - $ref : "#/components/parameters/username"
+        - $ref : "#/components/parameters/ccMethod"
+        - $ref : "#/components/parameters/ccParams"
+      responses:
+        '201':
+          description: query responses from chaincode
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+          tags:
+            - HL Fabric
+          summary: invoke basic asset transfer chaincode
+          parameters:
+            - $ref : "#/components/parameters/identityType"
+            - $ref : "#/components/parameters/username"
+            - $ref : "#/components/parameters/ccMethod"
+            - $ref : "#/components/parameters/ccParams"
+          responses:
+            '201':
+              description: invoke responses from chaincode
+              content:
+                application/json:
+                  schema:
+                    type: object
