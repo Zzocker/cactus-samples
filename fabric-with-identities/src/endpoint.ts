@@ -218,8 +218,8 @@ export default class Endpoint {
         msg: 'failed to invoke',
       });
     }
-    const method: string = req.query.ccParams as string;
-    const params: string[] = req.query.params as string[];
+    const method: string = req.query.ccMethod as string;
+    const params: string[] = req.query.ccParams as string[];
     this.log.debug(`${fnTag} querying basic chaincode`);
     try {
       const { functionOutput } = await this.ledger.transact({
